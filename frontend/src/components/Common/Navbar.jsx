@@ -5,6 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 import { RiMenuFold3Line, RiShoppingBag4Line } from "react-icons/ri";
 
 import { Link } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   return (
@@ -49,13 +50,16 @@ const Navbar = () => {
             <FaRegUser className="h-6 w-6 text-gray-700"></FaRegUser>
           </Link>
           <button className="relative hover:text-black">
-            {/* <AiTwotoneShopping className="h-6 w-6 text-gray-700"></AiTwotoneShopping> */}
             <RiShoppingBag4Line className="h-6 w-6  text-gray-700"></RiShoppingBag4Line>
             <span className="absolute bg-jeny-red text-white text-xs rounded-full px-2 py-0.5 -top-1">
               4
             </span>
           </button>
           {/* Search */}
+          <div className="overflow-hidden">
+            <SearchBar></SearchBar>
+          </div>
+
           <button className="md:hidden">
             <RiMenuFold3Line className="h-7 w-7 text-gray-700"></RiMenuFold3Line>
           </button>
