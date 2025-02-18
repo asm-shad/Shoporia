@@ -10,12 +10,14 @@ import CartDrawer from "../Layout/CartDrawer";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(true);
+
+
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
   return (
     <>
-      <nav className="container mx-auto flex items-center justify-between py-4 ">
+      <nav className="container mx-auto flex items-center justify-between py-4 px-2 sm:px-0">
         {/* Left-Logo */}
         <div>
           <Link to="/" className="text-2xl font-medium">
