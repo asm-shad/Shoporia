@@ -48,7 +48,7 @@ const SearchBar = () => {
             type="button"
             className="absolute right-4 top-1/2 transform -translate-y-1/2"
           >
-            <GiCrossedAirFlows className="h-6 w-6 text-gray-700 text-gray-600 hover:text-gray-800"></GiCrossedAirFlows>
+            <GiCrossedAirFlows className="h-6 w-6 text-gray-600 hover:text-gray-800"></GiCrossedAirFlows>
           </button>
         </form>
       ) : (
