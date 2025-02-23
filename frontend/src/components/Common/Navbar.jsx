@@ -10,8 +10,8 @@ import CartDrawer from "../Layout/CartDrawer";
 import { GiCrossedAirFlows } from "react-icons/gi";
 
 const Navbar = () => {
-  const [drawerOpen, setDrawerOpen] = useState(true);
-  const [navDrawerOpen, setNavDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [navDrawerOpen, setNavDrawerOpen] = useState(false);
 
   const toggleNavDrawer = () => {
     setNavDrawerOpen(!navDrawerOpen);
