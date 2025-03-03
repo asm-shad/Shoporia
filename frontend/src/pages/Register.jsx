@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { GiHandOfGod } from "react-icons/gi";
 import { Link } from "react-router-dom";
-import login from "../assets/login.webp";
+import register from "../assets/register.webp";
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("User Login:", { email, password });
+    console.log("User Registered:", { name, email, password });
   };
 
   return (
@@ -28,6 +29,16 @@ const Login = () => {
           <p className="text-center mb-6">
             Enter your username and password to Login
           </p>
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-2 border border-gray-200 rounded"
+              placeholder="Enter your username"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Email</label>
             <input
@@ -52,12 +63,12 @@ const Login = () => {
             type="submit"
             className="bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition w-full cursor-pointer"
           >
-            Sign In
+            Sign Up
           </button>
           <p className="mt-6 text-center text-sm">
-            Don't have an account?{" "}
-            <Link to="/register" className="text-blue-500">
-              Register
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500">
+              Login
             </Link>
           </p>
         </form>
@@ -65,7 +76,7 @@ const Login = () => {
       <div className="hidden md:block w-1/2 bg-gray-800">
         <div className="h-full flex flex-col justify-center items-center">
           <img
-            src={login}
+            src={register}
             alt="Login to Account"
             className="h-[750px] w-full object-cover"
           />
@@ -75,4 +86,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
