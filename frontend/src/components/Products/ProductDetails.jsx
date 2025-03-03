@@ -48,18 +48,18 @@ const similarProducts = [
     price: 250,
     images: [{ url: "https://picsum.photos/500/500?random=4" }],
   },
-  {
-    _id: 5,
-    name: "Product 5",
-    price: 300,
-    images: [{ url: "https://picsum.photos/500/500?random=5" }],
-  },
-  {
-    _id: 6,
-    name: "Product 6",
-    price: 350,
-    images: [{ url: "https://picsum.photos/500/500?random=6" }],
-  },
+  //   {
+  //     _id: 5,
+  //     name: "Product 5",
+  //     price: 300,
+  //     images: [{ url: "https://picsum.photos/500/500?random=5" }],
+  //   },
+  //   {
+  //     _id: 6,
+  //     name: "Product 6",
+  //     price: 350,
+  //     images: [{ url: "https://picsum.photos/500/500?random=6" }],
+  //   },
 ];
 
 const ProductDetails = () => {
