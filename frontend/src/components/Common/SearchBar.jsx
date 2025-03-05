@@ -53,7 +53,7 @@ const SearchBar = () => {
         </form>
       ) : (
         <button onClick={handleSearchToggle}>
-          <SlMagnifier className="h-6 w-6 text-gray-700"></SlMagnifier>
+          <SlMagnifier className="h-6 w-6 text-gray-700 cursor-pointer"></SlMagnifier>
         </button>
       )}
     </div>

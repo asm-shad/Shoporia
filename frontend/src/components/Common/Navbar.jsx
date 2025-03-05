@@ -65,7 +65,7 @@ const Navbar = () => {
             onClick={toggleCartDrawer}
             className="relative hover:text-black"
           >
-            <RiShoppingBag4Line className="h-6 w-6  text-gray-700"></RiShoppingBag4Line>
+            <RiShoppingBag4Line className="h-6 w-6 text-gray-700 cursor-pointer"></RiShoppingBag4Line>
             <span className="absolute bg-jeny-red text-white text-xs rounded-full px-2 py-0.5 -top-1">
               4
             </span>

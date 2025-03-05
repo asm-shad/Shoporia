@@ -6,6 +6,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
+    toggleCartDrawer();
     navigate("/checkout");
   };
 
@@ -18,7 +19,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
       {/* Close Button */}
       <div className="flex justify-end p-4">
         <button onClick={toggleCartDrawer}>
-          <GiCrossedAirFlows className="h-6 w-6 text-gray-600 hover:text-gray-800"></GiCrossedAirFlows>
+          <GiCrossedAirFlows className="h-6 w-6 text-gray-600 hover:text-gray-800 cursor-pointer"></GiCrossedAirFlows>
         </button>
       </div>
       {/* Cart Content with scrollable area  */}
@@ -31,7 +32,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
       <div className="p-4 bg-white sticky bottom-0">
         <button
           onClick={handleCheckout}
-          className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
+          className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition cursor-pointer"
         >
           Checkout
         </button>
