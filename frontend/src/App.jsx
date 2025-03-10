@@ -16,6 +16,7 @@ import AdminHomePage from "./pages/AdminHomePage";
 import UserManagement from "./components/Admin/UserManagement";
 import ProductManagement from "./components/Admin/ProductManagement";
 import EditProductPage from "./components/Admin/EditProductPage";
+import OrderManagement from "./components/Admin/OrderManagement";
 
 function App() {
   return (
@@ -65,6 +66,10 @@ function App() {
             <Route
               path="products/:id/edit"
               element={<EditProductPage></EditProductPage>}
+            ></Route>
+            <Route
+              path="orders"
+              element={<OrderManagement></OrderManagement>}
             ></Route>
           </Route>
         </Routes>
