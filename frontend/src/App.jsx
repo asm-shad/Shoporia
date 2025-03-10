@@ -14,6 +14,7 @@ import MyOrdersPage from "./pages/MyOrdersPage";
 import AdminLayout from "./components/Admin/AdminLayout";
 import AdminHomePage from "./pages/AdminHomePage";
 import UserManagement from "./components/Admin/UserManagement";
+import ProductManagement from "./components/Admin/ProductManagement";
 
 function App() {
   return (
@@ -55,6 +56,10 @@ function App() {
             <Route
               path="users"
               element={<UserManagement></UserManagement>}
+            ></Route>
+            <Route
+              path="products"
+              element={<ProductManagement></ProductManagement>}
             ></Route>
           </Route>
         </Routes>
