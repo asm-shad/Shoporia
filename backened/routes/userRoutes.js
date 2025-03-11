@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -18,15 +19,6 @@ router.post("/register", async (req, res) => {
 
     user = new User({ name, email, password });
     await user.save();
-
-    // res.status(201).json({
-    //   user: {
-    //     _id: user._id,
-    //     name: user.name,
-    //     email: user.email,
-    //     role: user.role,
-    //   },
-    // });
 
     // Create JWT Payload
     const payload = { user: user._id, role: user.role };
@@ -97,6 +89,14 @@ router.post("/login", async (req, res) => {
     console.error(error);
     res.status(500).send("Server Error");
   }
+});
+
+//  @route GET /api/users/profile
+// @desc Get logged-in user's profile (Protected Route)
+// @access private
+
+router.get("/profile", protect, async (req, res) => {
+  res.json(req.user);
 });
 
 module.exports = router;
