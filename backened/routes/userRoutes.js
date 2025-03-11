@@ -19,18 +19,43 @@ router.post("/register", async (req, res) => {
     user = new User({ name, email, password });
     await user.save();
 
-    res.status(201).json({
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-    });
+    // res.status(201).json({
+    //   user: {
+    //     _id: user._id,
+    //     name: user.name,
+    //     email: user.email,
+    //     role: user.role,
+    //   },
+    // });
+
+    // Create JWT Payload
+    const payload = { user: user._id, role: user.role };
+
+    // Sign and return the token along with user data
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "40h" },
+      (err, token) => {
+        if (err) throw err;
+        // Send the user and token in response
+        res.status(201).json({
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+          token,
+        });
+      }
+    );
   } catch (error) {
     console.log(error);
     res.status(500).send("Server Error");
   }
 });
+
+// @route POST /api/users/login
 
 module.exports = router;
