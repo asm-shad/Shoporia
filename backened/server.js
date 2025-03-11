@@ -5,7 +5,7 @@ const connectDB = require("./config/db");
 
 const app = express(); // Initialise express app
 app.use(express.json()); // Json data
-app.use(cors()); // To communicate with react server enable cors origie req
+app.use(cors()); // To communicate with react server enable cors origin req
 
 dotenv.config();
 
