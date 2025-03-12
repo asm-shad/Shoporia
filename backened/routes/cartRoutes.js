@@ -5,10 +5,10 @@ const Cart = require("../models/Cart");
 const router = express.Router();
 
 // Helper function to get a cart by user Id or guest ID
-const getCart = async (userId, gusetId) => {
+const getCart = async (userId, guestId) => {
   if (userId) {
     return await Cart.findOne({ user: userId });
-  } else if (gustId) {
+  } else if (guestId) {
     return await Cart.findOne({ guestId });
   }
   return null;
@@ -60,27 +60,29 @@ router.post("/", async (req, res) => {
       await cart.save();
       return res.status(200).json(cart);
     } else {
-        // Create a new cart for guest or user
-        const newCart = await Cart.create({
-            userId: userId ? userId : undefined,
-            guestId: guestId ? guestId : "guest_" + new Date(). getTime(),
-            products: [
-                {
-                    productId,
-                    name: product.name,
-                    image: product.images[0].url,
-                    price: product.price,
-                    size,
-                    color,
-                    quantity,
-                },
-            ],
-            totalPrice: product.price * quantity,
-        });
-        return res.status(201).json(newCart);
+      // Create a new cart for guest or user
+      const newCart = await Cart.create({
+        userId: userId ? userId : undefined,
+        guestId: guestId ? guestId : "guest_" + new Date().getTime(),
+        products: [
+          {
+            productId,
+            name: product.name,
+            image: product.images[0].url,
+            price: product.price,
+            size,
+            color,
+            quantity,
+          },
+        ],
+        totalPrice: product.price * quantity,
+      });
+      return res.status(201).json(newCart);
     }
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
   }
 });
+
+module.exports = router;
