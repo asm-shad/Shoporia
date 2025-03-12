@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/User");
 
 // Middleware to protect routes
 const protect = async (req, res, next) => {
@@ -14,7 +14,7 @@ const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log("Decoded Payload:", decoded);
 
-      req.user = await User.findById(decoded.user.id).select("-password");
+      req.user = await User.findById(decoded.user).select("-password");
       next();
     } catch (error) {
       console.error("Token Verification Failed", error);

@@ -97,9 +97,9 @@ const productSchema = new mongoose.Schema(
       type: String,
     },
     dimensions: {
-      type: Number,
-      width: Number,
-      height: Number,
+      length: { type: Number, required: true },
+      width: { type: Number, required: true },
+      height: { type: Number, required: true },
     },
     weight: Number,
   },
