@@ -211,7 +211,14 @@ router.get("/", async (req, res) => {
     //   query.$or = [{ name: { $regex: search, $options: "i" } }];
     //   query.$or = [{ description: { $regex: search, $options: "i" } }];
     // }
-    if (search) {
+    // if (search) {
+    //   query.$or = [
+    //     { name: { $regex: search, $options: "i" } },
+    //     { description: { $regex: search, $options: "i" } },
+    //   ];
+    // }
+
+    if (search && search.trim() !== "") {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
@@ -219,7 +226,24 @@ router.get("/", async (req, res) => {
     }
 
     // Sort Logic
-    let sort = {};
+    // let sort = {};
+    // if (sortBy) {
+    //   switch (sortBy) {
+    //     case "priceAsc":
+    //       sort = { price: 1 };
+    //       break;
+    //     case "priceDesc":
+    //       sort = { price: -1 };
+    //       break;
+    //     case "popularity":
+    //       sort = { rating: -1 };
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
+
+    let sort = { createdAt: -1 }; // Default: Newest first
     if (sortBy) {
       switch (sortBy) {
         case "priceAsc":
@@ -230,8 +254,6 @@ router.get("/", async (req, res) => {
           break;
         case "popularity":
           sort = { rating: -1 };
-          break;
-        default:
           break;
       }
     }
@@ -244,6 +266,23 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("server Error");
+  }
+});
+
+// @route GET /api/products/:id
+// @desc Get a single product by ID
+// @access Public
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: "Product Not Found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
   }
 });
 
