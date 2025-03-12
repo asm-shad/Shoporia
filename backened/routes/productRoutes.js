@@ -1,6 +1,6 @@
 const express = require("express");
 const Product = require("../models/Product"); //Usually model name in capital
-const { protect } = require("../middleware/authMiddleware");
+const { protect, admin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
 // @desc Create a new Priduct
 // @access Private/Admin
 
-router.post("/", protect, async (req, res) => {
+router.post("/", protect, admin, async (req, res) => {
   try {
     const {
       name,
@@ -61,7 +61,6 @@ router.post("/", protect, async (req, res) => {
     console.error("Error creating product:", error);
     res.status(500).json({ message: "Server Error", error: error.message });
   }
-  
 });
 
 module.exports = router;
