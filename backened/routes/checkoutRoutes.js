@@ -76,14 +76,14 @@ router.post("/:id/finalize", protect, async (req, res) => {
     const checkout = await Checkout.findById(req.params.id);
 
     if (!checkout) {
-      return res.status(400).json({ message: "Checout not found." });
+      return res.status(400).json({ message: "Checkout not found." });
     }
 
     if (checkout.isPaid && !checkout.isFinalized) {
       // Create the final order based on the checkout details
       const finalOrder = await Order.create({
         user: checkout.user,
-        orderItems: checkout.orderItems,
+        orderItems: checkout.checkoutItems,
         shippingAddress: checkout.shippingAddress,
         paymentMethod: checkout.paymentMethod,
         totalPrice: checkout.totalPrice,
