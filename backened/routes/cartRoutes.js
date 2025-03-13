@@ -1,6 +1,7 @@
 const express = require("express");
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -21,8 +22,7 @@ router.post("/", async (req, res) => {
   const { productId, quantity, size, color, guestId, userId } = req.body;
   try {
     const product = await Product.findById(productId);
-    if (!product)
-      return res.status((404).json({ message: "Product not found" }));
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
     // Determine if the user is logged in or guest
     let cart = await getCart(userId, guestId);
