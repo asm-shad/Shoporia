@@ -7,7 +7,8 @@ const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 const orderRoutes = require("./routes/orderRoutes");
-console.log("User routes loaded ✅");
+const uploadRoutes = require("./routes/uploadRoutes");
+
 const app = express(); // Initialise express app
 app.use(express.json()); // Json data
 app.use(cors()); // To communicate with react server enable cors origin req
@@ -26,10 +27,11 @@ app.get("/", (req, res) => {
 
 // API Routes (This will prepand .api/users in all our user routes)
 app.use("/api/users", userRoutes);
-app.use("/api/products", productRoutes);  
+app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
