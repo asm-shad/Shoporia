@@ -133,7 +133,7 @@ const UserManagement = () => {
                     name=""
                     value={user.role}
                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                    className="p-2 border border-gray-200 rounded"
+                    className="p-2 border border-gray-200 rounded cursor-pointer"
                     id=""
                   >
                     <option value="customer">Customer</option>
