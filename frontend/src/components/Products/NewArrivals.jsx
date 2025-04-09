@@ -8,7 +8,6 @@ const NewArrivals = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [scrollRight, setScrollRight] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const newArrivals = [
