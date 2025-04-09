@@ -9,7 +9,7 @@ export const fetchUsers = createAsyncThunk("admin/fetchUsers", async () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
     }
   );
-  response.data;
+  return response.data;
 });
 
 // Add the create user action
@@ -26,7 +26,7 @@ export const addUser = createAsyncThunk(
           },
         }
       );
-      response.data;
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "An error occurred");
     }
@@ -46,7 +46,7 @@ export const updateUser = createAsyncThunk(
         },
       }
     );
-    response.data;
+    return response.data;
   }
 );
 
