@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -10,96 +11,22 @@ const NewArrivals = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const newArrivals = [
-    {
-      _id: "1",
-      name: "Stylish Jacket",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=1",
-          altText: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "2",
-      name: "Casual Sneakers",
-      price: 85,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=2",
-          altText: "Casual Sneakers",
-        },
-      ],
-    },
-    {
-      _id: "3",
-      name: "Classic Watch",
-      price: 150,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=3",
-          altText: "Classic Watch",
-        },
-      ],
-    },
-    {
-      _id: "4",
-      name: "Leather Wallet",
-      price: 60,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=4",
-          altText: "Leather Wallet",
-        },
-      ],
-    },
-    {
-      _id: "5",
-      name: "Denim Jeans",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=5",
-          altText: "Denim Jeans",
-        },
-      ],
-    },
-    {
-      _id: "6",
-      name: "Summer Hat",
-      price: 40,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=6",
-          altText: "Summer Hat",
-        },
-      ],
-    },
-    {
-      _id: "7",
-      name: "Formal Shoes",
-      price: 130,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=7",
-          altText: "Formal Shoes",
-        },
-      ],
-    },
-    {
-      _id: "8",
-      name: "Sunglasses",
-      price: 70,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=8",
-          altText: "Sunglasses",
-        },
-      ],
-    },
-  ];
+  const [newArrivals, setNewArrivals] = useState([]);
+
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
+        );
+        console.log("New Arrivals API response:", res.data);
+        setNewArrivals(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchNewArrivals();
+  }, []);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -107,7 +34,9 @@ const NewArrivals = () => {
     setScrollLeft(scrollRef.current.scrollLeft);
   };
 
-  const handleMouseUp = (e) => {};
+  const handleMouseUp = (e) => {
+    setIsDragging(false);
+  };
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
@@ -152,7 +81,7 @@ const NewArrivals = () => {
 
       return () => container.removeEventListener("scroll", updateScrollButtons);
     }
-  }, []);
+  }, [newArrivals]);
 
   return (
     <section className="py-16 px-4 lg:px-0">
