@@ -81,7 +81,7 @@ const Login = () => {
           <p className="mt-6 text-center text-sm">
             Don't have an account?{" "}
             <Link
-              to={`/register?redirect=${encodedURIComponent(redirect)}`}
+              to={`/register?redirect=${encodeURIComponent(redirect)}`}
               className="text-blue-500"
             >
               Register
