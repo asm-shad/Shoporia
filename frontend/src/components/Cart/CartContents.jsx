@@ -4,6 +4,7 @@ import {
   removeFromCart,
   updateCartItemQuantity,
 } from "../../redux/slices/cartSlice";
+import { useDispatch } from "react-redux";
 
 const CartContents = ({ cart, userId, guestId }) => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const CartContents = ({ cart, userId, guestId }) => {
                       product.color
                     )
                   }
-                  className="border border-gray-300 rounded-md px-2 py-1 text-xl font-medium"
+                  className="border border-gray-300 rounded-md px-2 py-1 text-xl font-medium cursor-pointer"
                 >
                   -
                 </button>
@@ -73,7 +74,7 @@ const CartContents = ({ cart, userId, guestId }) => {
                       product.color
                     )
                   }
-                  className="border border-gray-300 rounded-md px-2 py-1 text-xl font-medium"
+                  className="border border-gray-300 rounded-md px-2 py-1 text-xl font-medium cursor-pointer"
                 >
                   +
                 </button>
@@ -91,7 +92,7 @@ const CartContents = ({ cart, userId, guestId }) => {
                 )
               }
             >
-              <RiDeleteBin3Line className="h-6 w-6 mt-2 text-red-600"></RiDeleteBin3Line>
+              <RiDeleteBin3Line className="h-6 w-6 mt-2 text-red-600 cursor-pointer"></RiDeleteBin3Line>
             </button>
           </div>
         </div>
