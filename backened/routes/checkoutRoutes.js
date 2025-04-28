@@ -33,7 +33,7 @@ router.post("/create-stripe-session", protect, async (req, res) => {
         quantity: item.quantity,
       })),
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.CLIENT_URL}/order-confirmation`,
       cancel_url: `${process.env.CLIENT_URL}/payment-cancelled`,
       metadata: {
         userId: req.user._id.toString(),

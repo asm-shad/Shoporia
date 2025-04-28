@@ -58,10 +58,10 @@ const Checkout = () => {
   
 
   if(loading) return <p>Loading cart...</p>;
-  if(error) return <p>Error: (error)</p>
+  if(error) return <p>Error: (error)</p>;
   if(!cart || !cart.products || cart.products.length === 0) {
     return <p>Your cart is empty.</p>
-  }
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
