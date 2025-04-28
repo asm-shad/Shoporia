@@ -1,5 +1,6 @@
 const express = require("express");
-const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 const Checkout = require("../models/Checkout");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
@@ -64,7 +65,7 @@ router.put("/:id/pay", protect, async (req, res) => {
       checkout.isPaid = true;
       checkout.paymentStatus = paymentStatus;
       checkout.paymentDetails = paymentDetails;
-      checkout.paidAt = Date.now(); // Fixed
+      checkout.paidAt = Date.now();
 
       await checkout.save();
 

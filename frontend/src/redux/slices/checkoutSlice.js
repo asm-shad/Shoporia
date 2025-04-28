@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async thunk to create a checkout session
-export const createCheckout = createAsyncThunk(
-  "checkout/createAsyncThunk",
-  async (checkoutdata, { rejectWithValue }) => {
+// Async thunk to create a Stripe Checkout session
+export const createStripeSession = createAsyncThunk(
+  "checkout/createStripeSession",
+  async (checkoutItems, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
-        checkoutdata,
+        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/create-stripe-session`,
+        { checkoutItems }, // pass inside { checkoutItems }
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
         }
       );
-      return response.data;
+      return response.data; // returns { id: sessionId }
     } catch (error) {
       return rejectWithValue(error.response?.data || "An error occurred");
     }
@@ -25,22 +25,22 @@ export const createCheckout = createAsyncThunk(
 const checkoutSlice = createSlice({
   name: "checkout",
   initialState: {
-    checkout: null,
+    sessionId: null,
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createCheckout.pending, (state) => {
+      .addCase(createStripeSession.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createCheckout.fulfilled, (state, action) => {
+      .addCase(createStripeSession.fulfilled, (state, action) => {
         state.loading = false;
-        state.checkout = action.payload;
+        state.sessionId = action.payload.id; // sessionId returned from backend
       })
-      .addCase(createCheckout.rejected, (state, action) => {
+      .addCase(createStripeSession.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
       });

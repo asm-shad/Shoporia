@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PayPalButton from "./PayPalButton";
+import { loadStripe } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
-import { createCheckout } from "../../redux/slices/checkoutSlice";
+import { createStripeSession } from "../../redux/slices/checkoutSlice";
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {cart, loading, error} = useSelector((state) => state.cart);
   const {user} = useSelector((state) => state.auth);
-  const [checkoutId, setCheckoutId] = useState();
+  // const [checkoutId, setCheckoutId] = useState();
 
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
@@ -29,41 +30,51 @@ const Checkout = () => {
     }
   }, [cart, navigate]);
 
-  const handleCreateCheckout = (e) => {
-    e.preventDefault();
-    if(cart && cart.products.length > 0) {
-      const res = dispatch(
-        createCheckout({
-          checkoutItems: cart.products,
-          shippingAddress,
-          paymentMethod: "Stripe",
-          totalPrice: cart.totalPrice,
-        })
-      );
-      if(res.payload && res.payload._id){
-        setCheckoutId(res.payload._id); // Set checkout ID if checkout was successful
-      }
 
+  const handleStripeCheckout = async (e) => {
+    e.preventDefault();
+  
+    if (cart && cart.products.length > 0) {
+      try {
+        const res = await dispatch(
+          createStripeSession(
+            cart.products.map(product => ({
+              name: product.name,
+              image: product.image,
+              price: product.price,
+              quantity: product.quantity,
+            }))
+          )
+        ).unwrap();
+  
+        const stripe = await stripePromise;
+        await stripe.redirectToCheckout({ sessionId: res.id });
+      } catch (error) {
+        console.error("Stripe Checkout Error:", error);
+        alert("Something went wrong. Please try again!");
+      }
     }
   };
+  
 
-  const handlePaymentSuccess = (details) => {
-    console.log("Payment Successful", details);
-    navigate("/order-confirmation");
-  };
+  if(loading) return <p>Loading cart...</p>;
+  if(error) return <p>Error: (error)</p>
+  if(!cart || !cart.products || cart.products.length === 0) {
+    return <p>Your cart is empty.</p>
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
       {/* Left Section */}
       <div className="bg-white rounded-lg p-6">
         <h2 className="text-2xl uppercase mb-6">Checkout</h2>
-        <form onSubmit={handleCreateCheckout}>
+        <form onSubmit={handleStripeCheckout}>
           <h3 className="text-lg mb-4">Contact Details</h3>
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <input
               type="email"
-              value="asmshad@gmail.com"
+              value={user?.email || ""}
               className="w-full p-2 border border-gray-200 rounded"
               disabled
             />
@@ -179,24 +190,12 @@ const Checkout = () => {
             />
           </div>
           <div className="mt-6">
-            {!checkoutId ? (
-              <button
-                type="submit"
-                className="w-full bg-black text-white py-3 rounded cursor-pointer"
-              >
-                Continue to Payment
-              </button>
-            ) : (
-              <div>
-                <h3 className="text-lg mb-4">Pay with Paypal.</h3>
-                {/* Paypal Button Component */}
-                <PayPalButton
-                  amount={1000}
-                  onSuccess={handlePaymentSuccess}
-                  onError={(err) => alert("Payment Failed. Try Again.")}
-                ></PayPalButton>
-              </div>
-            )}
+            <button
+              type="submit"
+              className="w-full bg-black text-white py-3 rounded cursor-pointer"
+            >
+              Pay with Stripe
+            </button>
           </div>
         </form>
       </div>
