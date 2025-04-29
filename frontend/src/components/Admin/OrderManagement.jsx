@@ -1,20 +1,7 @@
-import React from "react";
-
-const orders = [
-  {
-    _id: 12312321,
-    user: {
-      name: "ASM Shad",
-    },
-    totalPrice: 320,
-  },
-];
-
-const handleStatusChange = (orderId, status) => {
-  console.log({ id: orderId, status });
-};
-
 const OrderManagement = () => {
+  const handleStatusChange = (orderId, status) => {
+    console.log({ id: orderId, status });
+  };
   return (
     <div className=" max-w-7xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Order Management</h2>
