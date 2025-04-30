@@ -1,38 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrderDetails } from "../redux/slices/orderSlice";
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
-  const [orderDetails, setOrderDetails] = useState(null);
+  const dispatch = useDispatch();
+  const { orderDetails, loading, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    const mockOrderDetails = {
-      _id: id,
-      ceratedAt: new Date(),
-      isPaid: true,
-      isDelivered: false,
-      paymentMethod: "PayPal",
-      shippingMethod: "Standard",
-      shippingAddress: { city: "New York", country: "USA" },
-      orderItems: [
-        {
-          productId: "1",
-          name: "Jacket",
-          price: 120,
-          quantity: 1,
-          image: "https://picsum.photos/150?random=24",
-        },
-        {
-          productId: "2",
-          name: "Shirt",
-          price: 150,
-          quantity: 1,
-          image: "https://picsum.photos/150?random=25",
-        },
-      ],
-    };
-    setOrderDetails(mockOrderDetails);
-  }, [id]);
+    dispatch(fetchOrderDetails(id));
+  }, [dispatch, id]);
+
+  if (loading) return <p>Loading order details...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
@@ -48,18 +29,18 @@ const OrderDetailsPage = () => {
                 Order ID: #{orderDetails._id}
               </h3>
               <p className="text-gray-600">
-                {new Date(orderDetails.ceratedAt).toLocaleDateString()}
+                {new Date(orderDetails.createdAt).toLocaleDateString()}
               </p>
             </div>
             <div className="flex flex-col items-start sm:items-end mt-4 sm:mt-0">
               <span
                 className={`${
-                  !orderDetails.isPaid
+                  orderDetails.isPaid
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"
                 } px-3 py-1 rounded-full text-sm font-medium mb-2`}
               >
-                {!orderDetails.isPaid ? "Approved" : "Pending"}
+                {orderDetails.isPaid ? "Paid" : "Unpaid"}
               </span>
               <span
                 className={`${
@@ -68,26 +49,30 @@ const OrderDetailsPage = () => {
                     : "bg-yellow-100 text-yellow-700"
                 } px-3 py-1 rounded-full text-sm font-medium mb-2`}
               >
-                {orderDetails.isDelivered ? "Delivered" : "Pending Delievery"}
+                {orderDetails.isDelivered ? "Delivered" : "Pending Delivery"}
               </span>
             </div>
           </div>
+
           {/* Customer, Payment, Shipping Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
             <div>
               <h4 className="text-lg font-semibold mb-2">Payment Info</h4>
               <p>Payment Method: {orderDetails.paymentMethod}</p>
-              <p>Status: {orderDetails.isPaid ? "Paid" : "UnPaid"}</p>
+              <p>Status: {orderDetails.isPaid ? "Paid" : "Unpaid"}</p>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-2">Shipping Info</h4>
               <p>Shipping Method: {orderDetails.shippingMethod}</p>
               <p>
                 Address:{" "}
-                {`${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.country}`}
+                {`${orderDetails.shippingAddress?.city || "N/A"}, ${
+                  orderDetails.shippingAddress?.country || "N/A"
+                }`}
               </p>
             </div>
           </div>
+
           {/* Product List */}
           <div className="overflow-x-auto">
             <h4 className="text-lg font-semibold mb-4">Products</h4>
@@ -117,13 +102,14 @@ const OrderDetailsPage = () => {
                       </Link>
                     </td>
                     <td className="py-2 px-4">${item.price}</td>
-                    <td className="py-2 px-4">${item.quantity}</td>
+                    <td className="py-2 px-4">{item.quantity}</td>
                     <td className="py-2 px-4">${item.price * item.quantity}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+
           {/* Back to Orders Link */}
           <Link to="/my-orders" className="text-blue-500 hover:underline">
             Back to My Orders

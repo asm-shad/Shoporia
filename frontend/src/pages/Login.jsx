@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GiHandOfGod } from "react-icons/gi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../assets/login.webp";
@@ -12,7 +12,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { user, guestId, loading } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
 
   // Get redirect parameter and check if it's checkout or something
@@ -76,10 +76,10 @@ const Login = () => {
             type="submit"
             className="bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition w-full cursor-pointer"
           >
-            Sign In
+            {loading ? "Loading..." : "Sign In"}
           </button>
           <p className="mt-6 text-center text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?
             <Link
               to={`/register?redirect=${encodeURIComponent(redirect)}`}
               className="text-blue-500"

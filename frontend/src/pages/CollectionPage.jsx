@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import FilterSidebar from "../components/Products/FilterSidebar";
 import SortOptions from "../components/Products/SortOptions";
@@ -6,20 +6,21 @@ import ProductGrid from "../components/Products/ProductGrid";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductByFilters } from "../redux/slices/productsSlice";
+import { useMemo } from "react";
 
 const CollectionPage = () => {
   const { collection } = useParams();
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
-  const queryParams = Object.fromEntries([...searchParams]);
+  const queryParams = useMemo(() => Object.fromEntries([...searchParams]), [searchParams]);
 
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProductByFilters({ collection, ...queryParams }));
-  }, [dispatch, collection, searchParams]);
+  }, [dispatch, collection, queryParams]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

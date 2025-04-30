@@ -1,4 +1,6 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 const Checkout = require("../models/Checkout");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
@@ -7,33 +9,40 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 // @route POST /api/checkout
 // @desc Create a new checkout session
 // @access Private
+router.post("/create-stripe-session", protect, async (req, res) => {
+  const { checkoutItems } = req.body;
 
-router.post("/", protect, async (req, res) => {
-  const { checkoutItems, shippingAddress, paymentMethod, totalPrice } =
-    req.body;
-
-  if (!checkoutItems || checkoutItems.length === 0) {
-    return res.status(400).json({ message: "no items in checkout." });
-  }
   try {
-    // Create a new checkout session
-    const newCheckout = await Checkout.create({
-      user: req.user._id,
-      checkoutItems: checkoutItems,
-      shippingAddress,
-      paymentMethod,
-      totalPrice,
-      paymentStatus: "Pending",
-      isPaid: false,
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: checkoutItems.map(item => ({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item.name,
+            images: [item.image], // Optional: Display product image on Stripe Checkout
+          },
+          unit_amount: Math.round(item.price * 100), // Stripe requires amount in cents
+        },
+        quantity: item.quantity,
+      })),
+      mode: "payment",
+      success_url: `${process.env.CLIENT_URL}/order-confirmation`,
+      cancel_url: `${process.env.CLIENT_URL}/payment-cancelled`,
+      metadata: {
+        userId: req.user._id.toString(),
+      }
     });
-    console.log(`Checkout create for user: ${req.user._id}`);
-    res.status(201).json(newCheckout);
+
+    res.json({ id: session.id });
   } catch (error) {
-    console.error("Error Creating checkout session:", error);
-    res.status(500).json({ message: "Server Error" });
+    console.error("Stripe checkout session error:", error);
+    res.status(500).json({ error: "Stripe session creation failed" });
   }
 });
 
@@ -54,7 +63,7 @@ router.put("/:id/pay", protect, async (req, res) => {
       checkout.isPaid = true;
       checkout.paymentStatus = paymentStatus;
       checkout.paymentDetails = paymentDetails;
-      checkout.paidAt = Date.now(); // Fixed
+      checkout.paidAt = Date.now();
 
       await checkout.save();
 
@@ -69,7 +78,7 @@ router.put("/:id/pay", protect, async (req, res) => {
 });
 
 // @route POST /api/checkout/:id/finalize
-// @desc Finalize chrckout and convert to an order after payment cinfirmation
+// @desc Finalize checkout and convert to an order after payment confirmation
 // @access Private
 router.post("/:id/finalize", protect, async (req, res) => {
   try {

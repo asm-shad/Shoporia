@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // import { AiTwotoneShopping } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 
@@ -14,6 +14,7 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
   const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
 
   const cartItemCount =
     cart?.products?.reduce((total, product) => total + product.quantity, 0) ||
@@ -64,12 +65,15 @@ const Navbar = () => {
         </div>
         {/* Right Icons */}
         <div className="flex items-center space-x-4">
-          <Link
-            to="/admin"
-            className="block bg-black px-2 rounded text-sm text-white"
-          >
-            Admin
-          </Link>
+          {user && user.role === "admin" && (
+            <Link
+              to="/admin"
+              className="block bg-black px-2 rounded text-sm text-white"
+            >
+              Admin
+            </Link>
+          )}
+
           <Link to="/profile" className="hover:text-black">
             <FaRegUser className="h-6 w-6 text-gray-700"></FaRegUser>
           </Link>

@@ -155,8 +155,9 @@ const productsSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.loading = false;
+        const updatedProduct = action.payload;
         const index = state.products.findIndex(
-          (product) => product._id === updateProduct._id
+          (product) => product._id === updatedProduct._id
         );
         if (index !== -1) {
           state.products[index] = updatedProduct;
@@ -166,6 +167,7 @@ const productsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      
       // handle
       .addCase(fetchSimilarProducts.pending, (state) => {
         state.loading = true;

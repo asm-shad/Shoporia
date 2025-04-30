@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GiHandOfGod } from "react-icons/gi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import register from "../assets/register.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/slices/authSlice";
+import { mergeCart } from "../redux/slices/cartSlice"; 
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { user, guestId, loading } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
 
   // Get redirect parameter and check if it's checkout or something
@@ -86,7 +87,7 @@ const Register = () => {
             type="submit"
             className="bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition w-full cursor-pointer"
           >
-            Sign Up
+            {loading ? "Loading..." : "Sign Up"}
           </button>
           <p className="mt-6 text-center text-sm">
             Already have an account?{" "}
