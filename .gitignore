@@ -9,3 +9,6 @@ backend/build/
 # Ignore environment files (from both frontend and backend)
 frontend/.env
 backend/.env
+
+logs
+*.logs
